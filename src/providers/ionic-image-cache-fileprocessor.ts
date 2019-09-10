@@ -164,7 +164,7 @@ export class IonicImageCacheHelperProvider {
     return new Promise( (resolver, reject) =>{
       const fileTransfer: FileTransferObject = this.transfer.create();
     
-      let ext = fileurl.split('.').pop();
+      let ext = this.getFileExtentions(fileurl);
       let prog:number = 0;
       let targetPath:string = "";
   
@@ -202,7 +202,6 @@ export class IonicImageCacheHelperProvider {
         
       })
     });
-
   }
 
   addHours(date:Date, hours:number):Date{
@@ -229,12 +228,16 @@ export class IonicImageCacheHelperProvider {
 
   getFilename(url, withExt:boolean = true):string{
     let fileName: string = url.substring(url.lastIndexOf('/')+1);
-    let ext = "." + url.split('.').pop();
+    let ext = "." + this.getFileExtentions(url);
     return withExt ? fileName : `${fileName.replace(ext,"")}`;
   }
 
   getFileExtentions(url):string{
-    return url.split('.').pop();
+    return this.getValidExtension(url.split('.').pop());
   }
 
+  getValidExtension(ext) {
+    const validExtensions = ['png', 'jpg', 'jpeg'];
+    return validExtensions.indexOf(ext) > -1 ? ext : 'jpg';
+  }
 }

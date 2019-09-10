@@ -5,7 +5,6 @@ import { Platform } from 'ionic-angular';
 import { FileEntry, RemoveResult, DirectoryEntry } from '@ionic-native/file';
 import { ImageViewerController } from 'ionic-img-viewer';
 
-
 @Component({
   selector: 'ionic-image-cache',
   template: `
@@ -83,7 +82,6 @@ export class IonicImageCacheComponent {
 
   avatarbase64:string = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAAAXNSR0IArs4c6QAABMdJREFUaAXlm1toHFUcxneSZY2NKBUv2OKLVHNZk0AEhXjBENSCRUUflEKV+qDWK1RFii+rL4r4YBBaCiKCYCR5EEEMpangW9CASZbcEBUpZBeUrKA13d1k19+BLoRx53q+2abpwDKZc/7n+3+/OWfuJ87Kyko9dRktbReR9Sy5v63Vau/zO7ixsXF7qVS6hrJckp7SSYq7tP9i++t6vX56c3PzTDabLbrqU8vLy29RlnOXK7cTBwbwFIZPADkJZCXAfDag3ro6MWBAzziOc6y7u/vHsC7L5fKRjo6O3cQfCNsmalwSx/A6Jl4G9IGurq7QsMb4wMDAubm5ucfYWcejgoSNd5RnaYwW6dX9gM6FNeAVt7S09EZbW9sH1DteMXHKZT0M7Bpn2/sUsAakp6fnQzSf5M/zccC82iiBD/b29v7slShOOYfFBDtxP23Lcdo3ayMBpicm6RFzNpYv6H6P6OsqYQkwZk6qDDXTWV1dPWnOD83qopZJgBl2P0RNHCV+eHh4g/ipKG28YhXANY7dglcCYfnvCi0FcNDdk8JniiH9r0LokgFWwBoNa2D2fEt6eNsAc2e1qTLTCh1FD9daYVSVwxoYI5fUGxNrYIb05QXcwh6W7FjrHm4hsOQwtgZW3RAE0aiuBlbAwP7NffSxILOKevL8RL6qrZYVMMlPcR/9la2JMO3JcxrgXJhYvxhb4IyfuLqOYW39uscWeK8aKkBvT0B9YLUt8ABvGTsDs4gC6OCbbKWsgDGQzmQyd9uaiND+4gIbo7xKvd+sk17Gx8fbyXGLbR6rHr6QfMTWRJj2/f39zxB3Q5hYvxgF8J2Li4u3+iVR1HH4vK3QUQCbYf2UwoyXxsLCwl3UWQ9noy8BRucRI5bU0t7e/rhKWwLMcLsjn8/fqDLl1kH/YXdZ3G0JMMmddDptPonIF4ZzFlHzkywq4BS9cEjiyCXCjjzsKrLaVAKP8OlVCj07O7uXB4YjVoSuxjJgo4u5j7jVtL5WNjwyG+AdRs6uxrZiLQXG3LXcar6oMGY00HtQpdXQkQI3RBXr6enpq9G5WaG1VSMJ4NWtCeL+3dnZeWXctn7tti0wd2/WD/vNwOXAnLgkPQxwtZlh2zIpMLAVphD+ZmvKtC8Wi+fQMx/CpYsMGHN5zqr38BhXUjjkq/959J5VQ8uAeY16NOpEtKAdg97nxIwHxUWplwDTCwXeSHwXJXGEWAMtWyTAuJnI5XKJfDYtFApT7NA/VcQSYAx9qTLk1rkwg2fCXR53WwE8xeSx6bgGQrYbJe6PkLG+YXGB6dT6JHOgD4yNjT1EBsmnTC+nTEFcYbb8PnK+RsyiV1yY8kizaUlY4lLxaaVSOdHX1/dLmARJxPBS4F5e+7yAlyfQvyJKjlDAgOYRHV1bW/tiaGjIzIfeFgvP39fh7TDgz2FoXxhTfsA1xL5BZJQhldQlJ4zHMDEOr4pH6HXzaPooP89D9X/AQP5Dg08Yth9z1/RrmGzbKYaJ5bfR42/i6WnWGbe3rcBl7paOr6+vvzc4OCg5I7qTtXKb/5DZA/BROvB51lc1cjtUmKeSz6rV6ruciM42KnbKen5+fjdvYV4C+lWYrk+ZIbBT4Pw4ZmZmdsH6il/Mjqz7D9RWlBEQGS2+AAAAAElFTkSuQmCC`;
 
-
   srcUrl:string;
   imageViewerBigSrcUrl:string;
   cache_directory_name:string = this.imageCacheConfig.cacheDirectoryName;
@@ -115,9 +113,7 @@ export class IonicImageCacheComponent {
           console.log(value + ' is not a remote URL');
         }
       }
-       
     }
-
   }
 
   @Input("clickReturnObj") clickReturnObj:any;
@@ -192,8 +188,6 @@ export class IonicImageCacheComponent {
     return this.imageCacheConfig.spinnerEnabled;  
   }
 
-
-
   @Output() loaded = new EventEmitter();
   @Output() clicked = new EventEmitter();
   constructor(imageViewerCtrl: ImageViewerController, private ngZone:NgZone, public platform: Platform, public imageCacheConfig:IonicImageCacheConfig, private helpers: IonicImageCacheHelperProvider) {
@@ -231,11 +225,7 @@ export class IonicImageCacheComponent {
         this.loaded.emit(this.srcUrl);
       },this.helpers.randomIntFromInterval(300, 700));
 
-    })
-
-
-    
-
+    });
   }
 
   imageOnLoad(){
@@ -244,8 +234,8 @@ export class IonicImageCacheComponent {
       realImg.addEventListener('loaded', (e) => {
         //console.log("image loaddd");
         this.loaded.emit(this.srcUrl);
-      },false)
-    },500)
+      },false);
+    },500);
   }
 
   saveImageToFilesystem(src:string){
@@ -267,22 +257,15 @@ export class IonicImageCacheComponent {
     })
   }
 
-
-
   clearAllCache(){
     if(this.activeDirectory){
       this.helpers.clearAllCache(this.cache_directory_name, this.platform).then((removeResult:RemoveResult) =>{
         if(this.imageCacheConfig.debugMode){
           console.log(removeResult);
         }
-        
       });
     }
-
   }
-
-
-
 
   verifyFileAvailability(src:string, dEntry:DirectoryEntry){
 
@@ -294,7 +277,6 @@ export class IonicImageCacheComponent {
       }      
     })
   }
-
   
   activeDirectory:DirectoryEntry;
   async initialise(src:string){
@@ -311,10 +293,5 @@ export class IonicImageCacheComponent {
         this.saveImageToFilesystem(src);
       }
     })
-
-
   }
-
-
-
 }
