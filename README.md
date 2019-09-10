@@ -20,7 +20,7 @@ A rewrite of Ionic Image Loader library that fixes the SVG issues, local URL det
 
 #### 1. Install the NPM Package
 ```
-npm install --save ionic3-image-cache
+npm install --save https://github.com/ezDevs/ionic3-Image-Cache
 ```
 
 #### 2. Install Required Plugins and Dependency
