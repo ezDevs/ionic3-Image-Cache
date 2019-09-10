@@ -1,0 +1,1 @@
+[{"__symbolic":"module","version":4,"metadata":{},"exports":[{"from":"./ionic-image-cache.module"},{"from":"./components/ionic-image-cache"},{"from":"./providers/ionic-image-cache-fileprocessor"},{"from":"./providers/ionic-image-cache-config"}]}]
