@@ -1,3 +1,4 @@
+import { IonicImageCacheConfig } from './ionic-image-cache-config';
 import { Platform, Events } from 'ionic-angular';
 import { NgZone } from '@angular/core';
 import { FileTransfer } from '@ionic-native/file-transfer';
@@ -7,7 +8,8 @@ export declare class IonicImageCacheHelperProvider {
     private transfer;
     private file;
     ngZone: NgZone;
-    constructor(event: Events, transfer: FileTransfer, file: File, ngZone: NgZone);
+    imageCacheConfig: IonicImageCacheConfig;
+    constructor(event: Events, transfer: FileTransfer, file: File, ngZone: NgZone, imageCacheConfig: IonicImageCacheConfig);
     randomIntFromInterval(min: any, max: any): number;
     createDir(localFolderPath: string, platform: Platform): Promise<DirectoryEntry>;
     checkDir(localFolderPath: string, platform: Platform): Promise<boolean>;
@@ -15,16 +17,12 @@ export declare class IonicImageCacheHelperProvider {
     clearAllCache(localFolderPath: string, platform: Platform): Promise<{}>;
     getFilesInFolder(localFolderPath: string, platform: Platform): Promise<{}>;
     checkFile(localFolderPath: string, platform: Platform, filename: string): Promise<{}>;
-    getFile(DEntry: DirectoryEntry, fileName: string): Promise<FileEntry>;
+    getFile(DEntry: DirectoryEntry, fileName: string, url: string): Promise<FileEntry>;
     extractPath(remoteURL: string, asFilename?: boolean): string;
     ValidURL(str: string): boolean;
     downloadImage(fileurl: string, platform: Platform, localFolderPath?: string, trustAll?: boolean): Promise<{}>;
-    addHours(date: Date, hours: number): Date;
-    addMinutes(date: Date, minutes: number): Date;
     safeiOSNativeURL(url: string): string;
-    escapeRegExp(str: any): any;
-    replace(find: any, replace: any, fullstr: any): any;
-    getFilename(url: any, withExt?: boolean): string;
     getFileExtentions(url: any): string;
     getValidExtension(ext: any): any;
+    log(...args: any[]): void;
 }

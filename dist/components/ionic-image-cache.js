@@ -64,9 +64,7 @@ var IonicImageCacheComponent = /** @class */ (function () {
                 this.setImageSrc(value);
                 // we are running on a browser, or using livereload
                 // plugin will not function in this case
-                if (this.imageCacheConfig.debugMode) {
-                    console.log('You are running on a browser or using livereload.');
-                }
+                this.log('You are running on a browser or using livereload.');
             }
             else {
                 if (this.helpers.ValidURL(value)) {
@@ -74,9 +72,7 @@ var IonicImageCacheComponent = /** @class */ (function () {
                 }
                 else {
                     this.setImageSrc(value);
-                    if (this.imageCacheConfig.debugMode) {
-                        console.log(value + ' is not a remote URL');
-                    }
+                    this.log(value + ' is not a remote URL');
                 }
             }
         },
@@ -170,9 +166,7 @@ var IonicImageCacheComponent = /** @class */ (function () {
             var imageViewer = this._imageViewerCtrl.create(realImage, config);
             imageViewer.present();
             imageViewer.onDidDismiss(function (e) {
-                if (_this.imageCacheConfig.debugMode) {
-                    console.log(e, "Image viewer closed");
-                }
+                _this.log(e, "Image viewer closed");
             });
         }
         this.clicked.emit({ clickReturnObj: this.clickReturnObj });
@@ -199,26 +193,20 @@ var IonicImageCacheComponent = /** @class */ (function () {
         setTimeout(function () {
             var realImg = _this.realImage.nativeElement;
             realImg.addEventListener('loaded', function (e) {
-                //console.log("image loaddd");
-                //console.log("image loaddd");
+                //this.log("image loaddd");
+                //this.log("image loaddd");
                 _this.loaded.emit(_this.srcUrl);
             }, false);
         }, 500);
     };
     IonicImageCacheComponent.prototype.saveImageToFilesystem = function (src) {
         var _this = this;
-        if (this.imageCacheConfig.debugMode) {
-            console.log("Fetch from server.......", src);
-        }
+        this.log("Fetch from server.......", src);
         this.helpers.downloadImage(src, this.platform, this.cache_directory_name, this.imageCacheConfig.trustAllHosts).then(function (entry) {
-            if (_this.imageCacheConfig.debugMode) {
-                console.log("File saved", entry);
-            }
             _this.setImageSrc(entry.nativeURL, entry);
+            _this.log("File saved", entry);
         }).catch(function (err) {
-            if (_this.imageCacheConfig.debugMode) {
-                console.log("Failed to saved file to directory", err);
-            }
+            _this.log("Failed to saved file to directory", err);
             _this.setImageSrc(src);
         });
     };
@@ -226,15 +214,13 @@ var IonicImageCacheComponent = /** @class */ (function () {
         var _this = this;
         if (this.activeDirectory) {
             this.helpers.clearAllCache(this.cache_directory_name, this.platform).then(function (removeResult) {
-                if (_this.imageCacheConfig.debugMode) {
-                    console.log(removeResult);
-                }
+                _this.log(removeResult);
             });
         }
     };
     IonicImageCacheComponent.prototype.verifyFileAvailability = function (src, dEntry) {
         var _this = this;
-        this.helpers.getFile(dEntry, this.helpers.extractPath(src)).then(function (entry) {
+        this.helpers.getFile(dEntry, this.helpers.extractPath(src), src).then(function (entry) {
             if (entry != null) {
                 _this.setImageSrc(null, entry);
             }
@@ -251,9 +237,7 @@ var IonicImageCacheComponent = /** @class */ (function () {
                     case 0: return [4 /*yield*/, this.helpers.resolveDirectoryUrl(this.cache_directory_name, this.platform).then(function (dEntry) {
                             if (dEntry != null) {
                                 _this.activeDirectory = dEntry;
-                                if (_this.imageCacheConfig.debugMode) {
-                                    console.log(dEntry);
-                                }
+                                _this.log(dEntry);
                                 _this.verifyFileAvailability(src, dEntry);
                             }
                             else {
@@ -266,6 +250,15 @@ var IonicImageCacheComponent = /** @class */ (function () {
                 }
             });
         });
+    };
+    IonicImageCacheComponent.prototype.log = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        if (this.imageCacheConfig.enableDebugMode) {
+            console.log.apply(console, args);
+        }
     };
     IonicImageCacheComponent.decorators = [
         { type: Component, args: [{

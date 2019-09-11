@@ -100,18 +100,15 @@ export class IonicImageCacheComponent {
       this.setImageSrc(value);
       // we are running on a browser, or using livereload
       // plugin will not function in this case
-      if (this.imageCacheConfig.debugMode) {
-        console.log('You are running on a browser or using livereload.');
-      }
+
+      this.log('You are running on a browser or using livereload.');
 
     } else {
       if (this.helpers.ValidURL(value)) {
         this.initialise(value);
       } else {
         this.setImageSrc(value);
-        if (this.imageCacheConfig.debugMode) {
-          console.log(value + ' is not a remote URL');
-        }
+        this.log(value + ' is not a remote URL');
       }
     }
   }
@@ -189,7 +186,13 @@ export class IonicImageCacheComponent {
 
   @Output() loaded = new EventEmitter();
   @Output() clicked = new EventEmitter();
-  constructor(imageViewerCtrl: ImageViewerController, private ngZone: NgZone, public platform: Platform, public imageCacheConfig: IonicImageCacheConfig, private helpers: IonicImageCacheHelperProvider) {
+  constructor(
+    imageViewerCtrl: ImageViewerController,
+    private ngZone: NgZone,
+    public platform: Platform,
+    public imageCacheConfig: IonicImageCacheConfig,
+    private helpers: IonicImageCacheHelperProvider
+  ) {
     this._imageViewerCtrl = imageViewerCtrl;
   }
 
@@ -202,9 +205,7 @@ export class IonicImageCacheComponent {
       imageViewer.present();
 
       imageViewer.onDidDismiss((e) => {
-        if (this.imageCacheConfig.debugMode) {
-          console.log(e, "Image viewer closed");
-        }
+        this.log(e, "Image viewer closed");
       });
     }
     this.clicked.emit({ clickReturnObj: this.clickReturnObj });
@@ -231,27 +232,20 @@ export class IonicImageCacheComponent {
     setTimeout(() => {
       let realImg: HTMLImageElement = this.realImage.nativeElement;
       realImg.addEventListener('loaded', (e) => {
-        //console.log("image loaddd");
+        //this.log("image loaddd");
         this.loaded.emit(this.srcUrl);
       }, false);
     }, 500);
   }
 
   saveImageToFilesystem(src: string) {
-    if (this.imageCacheConfig.debugMode) {
-      console.log("Fetch from server.......", src);
-    }
+    this.log("Fetch from server.......", src);
 
     this.helpers.downloadImage(src, this.platform, this.cache_directory_name, this.imageCacheConfig.trustAllHosts).then((entry: FileEntry) => {
-      if (this.imageCacheConfig.debugMode) {
-        console.log("File saved", entry);
-      }
-
       this.setImageSrc(entry.nativeURL, entry);
+      this.log("File saved", entry);
     }).catch(err => {
-      if (this.imageCacheConfig.debugMode) {
-        console.log("Failed to saved file to directory", err);
-      }
+      this.log("Failed to saved file to directory", err);
       this.setImageSrc(src);
     })
   }
@@ -259,15 +253,13 @@ export class IonicImageCacheComponent {
   clearAllCache() {
     if (this.activeDirectory) {
       this.helpers.clearAllCache(this.cache_directory_name, this.platform).then((removeResult: RemoveResult) => {
-        if (this.imageCacheConfig.debugMode) {
-          console.log(removeResult);
-        }
+        this.log(removeResult);
       });
     }
   }
 
   verifyFileAvailability(src: string, dEntry: DirectoryEntry) {
-    this.helpers.getFile(dEntry, this.helpers.extractPath(src)).then((entry: FileEntry) => {
+    this.helpers.getFile(dEntry, this.helpers.extractPath(src), src).then((entry: FileEntry) => {
       if (entry != null) {
         this.setImageSrc(null, entry);
       } else {
@@ -281,14 +273,18 @@ export class IonicImageCacheComponent {
     await this.helpers.resolveDirectoryUrl(this.cache_directory_name, this.platform).then((dEntry: DirectoryEntry) => {
       if (dEntry != null) {
         this.activeDirectory = dEntry;
-        if (this.imageCacheConfig.debugMode) {
-          console.log(dEntry);
-        }
+        this.log(dEntry);
 
         this.verifyFileAvailability(src, dEntry);
       } else {
         this.saveImageToFilesystem(src);
       }
     })
+  }
+
+  log(...args) {
+    if (this.imageCacheConfig.enableDebugMode) {
+      console.log(...args);
+    }
   }
 }

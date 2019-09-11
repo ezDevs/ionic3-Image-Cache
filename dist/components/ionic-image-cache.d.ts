@@ -42,4 +42,5 @@ export declare class IonicImageCacheComponent {
     verifyFileAvailability(src: string, dEntry: DirectoryEntry): void;
     activeDirectory: DirectoryEntry;
     initialise(src: string): Promise<void>;
+    log(...args: any[]): void;
 }
