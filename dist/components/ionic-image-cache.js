@@ -201,13 +201,17 @@ var IonicImageCacheComponent = /** @class */ (function () {
     };
     IonicImageCacheComponent.prototype.saveImageToFilesystem = function (src) {
         var _this = this;
+        // mostra a imagem, depois faz o download
+        // em listas com muitas imagens, fazer o download antes
+        // atrasava muito as imagens para o usuário
+        this.setImageSrc(src);
         this.log("Fetch from server.......", src);
         this.helpers.downloadImage(src, this.platform, this.cache_directory_name, this.imageCacheConfig.trustAllHosts).then(function (entry) {
-            _this.setImageSrc(entry.nativeURL, entry);
+            /* this.setImageSrc(entry.nativeURL, entry); */
+            /* this.setImageSrc(entry.nativeURL, entry); */
             _this.log("File saved", entry);
         }).catch(function (err) {
             _this.log("Failed to saved file to directory", err);
-            _this.setImageSrc(src);
         });
     };
     IonicImageCacheComponent.prototype.clearAllCache = function () {

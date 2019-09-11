@@ -92,7 +92,7 @@ export class IonicImageCacheComponent {
   showPrev: boolean | string = true;
   @Input("imgCssClass") imgCssClass: string;
   @ViewChild("realImage") realImage: ElementRef;
-
+  
   _imageViewerCtrl: ImageViewerController;
   @Input() set src(value: string) {
 
@@ -239,15 +239,17 @@ export class IonicImageCacheComponent {
   }
 
   saveImageToFilesystem(src: string) {
+    // mostra a imagem, depois faz o download
+    // em listas com muitas imagens, fazer o download antes 
+    // atrasava muito as imagens para o usuário
+    this.setImageSrc(src);
     this.log("Fetch from server.......", src);
-
     this.helpers.downloadImage(src, this.platform, this.cache_directory_name, this.imageCacheConfig.trustAllHosts).then((entry: FileEntry) => {
-      this.setImageSrc(entry.nativeURL, entry);
+      /* this.setImageSrc(entry.nativeURL, entry); */
       this.log("File saved", entry);
     }).catch(err => {
       this.log("Failed to saved file to directory", err);
-      this.setImageSrc(src);
-    })
+    });
   }
 
   clearAllCache() {
@@ -265,7 +267,7 @@ export class IonicImageCacheComponent {
       } else {
         this.saveImageToFilesystem(src);
       }
-    })
+    });
   }
 
   activeDirectory: DirectoryEntry;
@@ -279,7 +281,7 @@ export class IonicImageCacheComponent {
       } else {
         this.saveImageToFilesystem(src);
       }
-    })
+    });
   }
 
   log(...args) {
